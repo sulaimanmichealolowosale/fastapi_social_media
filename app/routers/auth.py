@@ -8,7 +8,7 @@ from app import schemas, models, utils, oauth2
 router = APIRouter(tags=["Authentication"])
 
 
-@router.post("/login", status_code=status.HTTP_302_FOUND, response_model=schemas.Token)
+@router.post("/login", response_model=schemas.Token)
 async def login(login_details: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
     user = db.query(models.User).filter(
