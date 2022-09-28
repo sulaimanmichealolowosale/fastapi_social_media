@@ -14,6 +14,10 @@ router = APIRouter(
 async def create_user(user: schemas.CreateUser, db: Session = Depends(get_db)):
 
     hashed_password = utils.hash(user.password)
+    
+    existing_user=db.query(models.User).filter(models.User.email == user.email).first()
+    if existing_user:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="email already taken")
 
     user.password = hashed_password
     new_user = models.User(**user.dict())
